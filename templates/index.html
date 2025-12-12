@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Mental Health Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <!-- ============================================================================
+         SIDEBAR - Navigation latérale
+         ============================================================================ -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2 class="sidebar-logo">Tableau de Bord</h2>
+            <button class="sidebar-close-btn" onclick="toggleSidebar()" title="Fermer la sidebar">✕</button>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="#home" onclick="scrollToSection('home')" class="sidebar-link active">
+                <span class="sidebar-icon">🏠</span>
+                <span class="sidebar-text">Accueil</span>
+            </a>
+            <a href="#classic-search" onclick="scrollToSection('classic-search')" class="sidebar-link">
+                <span class="sidebar-icon">🔍</span>
+                <span class="sidebar-text">Recherche Classique</span>
+            </a>
+            <a href="#crud-section" onclick="scrollToSection('crud-section')" class="sidebar-link">
+                <span class="sidebar-icon">📝</span>
+                <span class="sidebar-text">Gestion CRUD</span>
+            </a>
+            <a href="#vector-search" onclick="scrollToSection('vector-search')" class="sidebar-link">
+                <span class="sidebar-icon">🧠</span>
+                <span class="sidebar-text">Recherche Vectorielle</span>
+            </a>
+            <a href="#statistical-analysis" onclick="scrollToSection('statistical-analysis')" class="sidebar-link">
+                <span class="sidebar-icon">📈</span>
+                <span class="sidebar-text">Analyse Statistique</span>
+            </a>
+            <a href="#about" onclick="scrollToSection('about')" class="sidebar-link">
+                <span class="sidebar-icon">ℹ️</span>
+                <span class="sidebar-text">À propos</span>
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="sidebar-stats">
+                <div class="sidebar-stat">
+                    <span class="stat-value">{{ '24,753' if connected else '0' }}</span>
+                    <span class="stat-label">Étudiants</span>
+                </div>
+                <div class="sidebar-stat">
+                    <span class="stat-value">15</span>
+                    <span class="stat-label">Champs</span>
+                </div>
+            </div>
+        </div>
+    </aside>
+    
+    <!-- ============================================================================
+         TOP HEADER avec bouton création
+         ============================================================================ -->
+    <header class="top-header">
+        <div class="top-header-content">
+            <!--   bouton sidebar -->
+            <button class="sidebar-open-btn" onclick="toggleSidebar()" title="Ouvrir la sidebar">
+                <span class="hamburger-icon">☰</span>
+            </button>
+            <!--  titre -->
+            <h1 class="top-header-title">Student Mental Health </h1>
+            <!--  bouton créer un étudiant -->
+            <button class="btn-create-student" onclick="createNewStudent()">
+                Créer un Étudiant
+            </button>
+        </div>
+    
+        
+        
+       
+    
+    <!-- ============================================================================
+         MAIN CONTENT
+         ============================================================================ -->
+    <div class="main-wrapper">
+    
+    <!-- ============================================================================
+         SECTION 2 — Hero Section (grand bloc d'accueil)
+         ============================================================================ -->
+    <section id="home" class="hero-section">
+        <div class="container">
+            <h1 class="hero-title">Plateforme d'analyse de la dépression chez les étudiants</h1>
+            <p class="hero-subtitle">MongoDB + Machine Learning</p>
+            <p class="hero-description">
+                Découvrez, analysez et explorez nos données grâce à la recherche classique 
+                et la recherche vectorielle avec Machine Learning.
+            </p>
+            <button class="hero-button" onclick="scrollToSection('classic-search')">
+                🔍 Commencer la recherche
+            </button>
+            
+            <!-- Statut de connexion MongoDB -->
+            {% if connected %}
+            <div class="status-banner success">
+                <span>✓</span> Connecté à MongoDB Atlas · {{ db_name }}.{{ collection_name }}
+            </div>
+            {% else %}
+            <div class="status-banner error">
+                <span>✗</span> Erreur de connexion MongoDB
+            </div>
+            {% endif %}
+        </div>
+    </section>
+    
+    <!-- ============================================================================
+         SECTION 3 — Présentation des fonctionnalités (3 cartes)
+         ============================================================================ -->
+    <section class="features-section">
+        <div class="container">
+            <div class="features-grid">
+                <!-- Carte 1 : Recherche classique -->
+                <div class="feature-card card-blue" onclick="scrollToSection('classic-search')">
+                    <div class="feature-icon">🔍</div>
+                    <h3 class="feature-title">Recherche Classique</h3>
+                    <p class="feature-description">
+                        Recherche avec autocomplétion intelligente
+                    </p>
+                    <button class="feature-button">Accéder →</button>
+                </div>
+                
+                <!-- Carte 2 : CRUD complet -->
+                <div class="feature-card card-green" onclick="scrollToSection('crud-section')">
+                    <div class="feature-icon">📝</div>
+                    <h3 class="feature-title">Gestion CRUD</h3>
+                    <p class="feature-description">
+                        Créer, modifier et supprimer des étudiants
+                    </p>
+                    <button class="feature-button">Accéder →</button>
+                </div>
+                
+                <!-- Carte 3 : Recherche vectorielle + ML -->
+                <div class="feature-card card-orange" onclick="scrollToSection('vector-search')">
+                    <div class="feature-icon">🧠</div>
+                    <h3 class="feature-title">Recherche Vectorielle ML</h3>
+                    <p class="feature-description">
+                        Recherche sémantique avec Machine Learning
+                    </p>
+                    <button class="feature-button">Accéder →</button>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- ============================================================================
+         SECTION 1 — Recherche Classique
+         ============================================================================ -->
+    <section id="classic-search" class="content-section">
+        <div class="container">
+            <div class="section-header">
+                <h2> Recherche Classique Avancée</h2>
+                <p class="section-description">
+                    Recherchez par champs spécifiques avec autocomplétion intelligente
+                </p>
+            </div>
+            
+            <!-- Conteneur pour la zone de recherche et l'autocomplétion -->
+            <div class="search-container">
+                <input 
+                    type="text" 
+                    id="searchInput" 
+                    class="search-input"
+                    placeholder="Recherche : Tapez normalement OU utilisez champ:valeur (ex: age:25, ville:Mumbai, id:166)..."
+                    autocomplete="off"
+                    spellcheck="false"
+                >
+                <ul id="autocompleteList" class="autocomplete-list"></ul>
+            </div>
+            
+            <button id="searchButton" class="search-button">Rechercher</button>
+            
+            <!-- Message de chargement -->
+            <div id="loadingMessage" class="loading-message" style="display: none;">
+                <span class="spinner">⏳</span>
+                <span>Recherche en cours...</span>
+            </div>
+            
+            <!-- Conteneur pour les résultats de recherche classique -->
+            <div id="classicResultsContainer" class="results-container">
+                <!-- Les résultats s'afficheront ici -->
+            </div>
+        </div>
+    </section>
+    
+    <!-- ============================================================================
+         SECTION 2 — Gestion CRUD
+         ============================================================================ -->
+    <section id="crud-section" class="content-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>📝 Gestion des Données (CRUD)</h2>
+                <p class="section-description">
+                    Créez, modifiez, supprimez et recherchez des étudiants dans la base de données MongoDB
+                </p>
+            </div>
+            <div style="text-align: center; padding: 40px;">
+                <button onclick="createNewStudent()" class="btn-create-large">
+                    Créer un Nouvel Étudiant
+                </button>
+                <p style="margin-top: 20px; color: #666; font-size: 1.1em;">
+                    Utilisez les boutons "Modifier" ou "Supprimer" sur les cartes d'étudiants pour gérer les données existantes.
+                </p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- ============================================================================
+         SECTION 3 — Recherche Vectorielle ML
+         ============================================================================ -->
+    <section id="vector-search" class="content-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>🧠 Recherche Vectorielle avec Machine Learning</h2>
+                <p class="section-description">
+                    Utilisez le Machine Learning pour trouver des étudiants correspondant sémantiquement à votre description
+                </p>
+            </div>
+            
+            <!-- Bouton de gestion des embeddings -->
+            <div class="embeddings-management-box">
+                <h3> Gestion des Embeddings</h3>
+                <p>
+                    Les embeddings sont des représentations vectorielles des étudiants utilisées pour la recherche vectorielle. 
+                    Vous pouvez les supprimer ou les régénérer si nécessaire.
+                </p>
+                <div class="embeddings-buttons">
+                    <button id="clearEmbeddingsBtn" onclick="clearEmbeddings()" class="btn-clear">
+                        🗑️ Supprimer les Embeddings
+                    </button>
+                    <button id="regenerateEmbeddingsBtn" onclick="regenerateEmbeddings()" class="btn-regenerate">
+                        🔄 Régénérer les Embeddings
+                    </button>
+                </div>
+                <div id="embeddingsStatus"></div>
+            </div>
+    
+            <!-- Zone de recherche vectorielle ML -->
+            <div class="vector-search-box">
+                <div class="vector-search-input-container">
+                    <textarea 
+                        id="vectorSearchInput" 
+                        class="vector-search-input"
+                        placeholder="Décrivez le profil d'étudiant recherché (ex: étudiant avec fort stress académique et peu de sommeil, étudiant dépressif avec pensées suicidaires, etc.)..."
+                        rows="3"
+                    ></textarea>
+                    <button id="vectorSearchButton" class="vector-search-button" onclick="performVectorSearch()">
+                        🔍 Recherche Vectorielle ML
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Message de chargement pour recherche ML -->
+            <div id="vectorLoadingMessage" class="loading-message" style="display: none;">
+                <span class="spinner">⏳</span>
+                <span>Recherche vectorielle ML en cours...</span>
+            </div>
+            
+            <!-- Conteneur pour les résultats de recherche vectorielle ML -->
+            <div id="vectorResultsContainer" class="results-container">
+                <!-- Les résultats s'afficheront ici -->
+            </div>
+        </div>
+    </section>
+    
+    <!-- ============================================================================
+         SECTION 4 — Analyse Statistique (EDF)
+         ============================================================================ -->
+    <section id="statistical-analysis" class="content-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>📈 Analyse Statistique avec EDF</h2>
+                <p class="section-description">
+                    Analysez vos données avec la Fonction de Distribution Empirique (EDF)
+                </p>
+            </div>
+            
+            <div class="stats-form-box">
+                <h3>📐 Formule EDF</h3>
+                <div class="formula-box">
+                    <p class="formula-text">
+                        <strong>F<sub>n</sub>(x) = (1/n) × Σ<sub>i=1</sub><sup>n</sup> 1<sub>{X_i ≤ x}</sub></strong>
+                    </p>
+                    <p class="formula-note">
+                        où n est le nombre total d'observations et 1<sub>{X_i ≤ x}</sub> est la fonction indicatrice
+                    </p>
+                </div>
+            </div>
+            
+            <div class="stats-form-box">
+                <h3>🔍 Sélection de la Variable</h3>
+                
+                <div class="stats-form-grid">
+                    <div>
+                        <label>Variable Quantitative:</label>
+                        <select id="statVariableSelect">
+                            <option value="">Chargement...</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label>Distribution Théorique:</label>
+                        <select id="statDistributionSelect">
+                            <option value="norm">Normale</option>
+                            <option value="expon">Exponentielle</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <button id="analyzeButton" onclick="performStatisticalAnalysis()" class="btn-analyze">
+                    📊 Analyser la Variable
+                </button>
+            </div>
+            
+            <!-- Zone d'affichage des résultats -->
+            <div id="statisticalResults"></div>
+        </div>
+    </section>
+    
+    <!-- ============================================================================
+         SECTION 5 — À propos du dataset
+         ============================================================================ -->
+    <section class="about-section" id="about">
+        <div class="container">
+            <h2 class="about-title">🧠 À propos du dataset</h2>
+            <p class="about-text">
+                Ce site utilise un dataset Kaggle portant sur la santé mentale des étudiants.
+            </p>
+            <p class="about-text">
+                L'objectif est de fournir un outil interactif permettant d'analyser les facteurs 
+                contribuant à la dépression grâce à MongoDB et au Machine Learning.
+            </p>
+        </div>
+    </section>
+    
+    <!-- ============================================================================
+         SECTION 6 — Footer
+         ============================================================================ -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3 class="footer-title">Student Mental Health Dashboard</h3>
+                <p class="footer-text">
+                    Plateforme d'analyse de la dépression chez les étudiants
+                </p>
+            </div>
+            
+            <div class="footer-section">
+                <h4 class="footer-subtitle">Technologies utilisées</h4>
+                <ul class="footer-tech-list">
+                    <li>🐍 Flask (Python)</li>
+                    <li>🍃 MongoDB Atlas</li>
+                    <li>🤖 Machine Learning</li>
+                    <li>📊 Charts & Visualisations</li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h4 class="footer-subtitle">Navigation</h4>
+                <ul class="footer-nav-list">
+                    <li><a href="#home" onclick="scrollToSection('home')">Accueil</a></li>
+                    <li><a href="#classic-search" onclick="scrollToSection('classic-search')">Recherche</a></li>
+                    <li><a href="#vector-search" onclick="scrollToSection('vector-search')">Recherche ML</a></li>
+                    <li><a href="#statistical-analysis" onclick="scrollToSection('statistical-analysis')">Analyse Statistique</a></li>
+                    <li><a href="#about" onclick="scrollToSection('about')">À propos</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2024 Student Mental Health Dashboard. Tous droits réservés.</p>
+        </div>
+    </footer>
+    
+    <!-- Bouton pour remonter en haut -->
+    <button class="scroll-to-top" id="scrollToTop" onclick="scrollToTop()">↑</button>
+    </div> <!-- Fin main-wrapper -->
+    
+    <!-- Inclusion du fichier JavaScript -->
+    <script src="{{ url_for('static', filename='js/search.js') }}"></script>
+    <script>
+        // ============================================================================
+        // FONCTIONS POUR L'ANALYSE STATISTIQUE (EDF)
+        // ============================================================================
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            loadStatisticalVariables();
+        });
+        
+        async function loadStatisticalVariables() {
+            try {
+                const response = await fetch('/api/statistical/variables');
+                const data = await response.json();
+                
+                if (data.success && data.variables) {
+                    const select = document.getElementById('statVariableSelect');
+                    select.innerHTML = '<option value="">Sélectionnez une variable...</option>';
+                    
+                    data.variables.forEach(variable => {
+                        const option = document.createElement('option');
+                        option.value = variable;
+                        option.textContent = variable;
+                        select.appendChild(option);
+                    });
+                } else {
+                    document.getElementById('statVariableSelect').innerHTML = 
+                        '<option value="">Erreur: Variables non disponibles</option>';
+                }
+            } catch (error) {
+                console.error('Erreur lors du chargement des variables:', error);
+                document.getElementById('statVariableSelect').innerHTML = 
+                    '<option value="">Erreur de connexion</option>';
+            }
+        }
+        
+        async function performStatisticalAnalysis() {
+            const variableSelect = document.getElementById('statVariableSelect');
+            const distributionSelect = document.getElementById('statDistributionSelect');
+            const analyzeButton = document.getElementById('analyzeButton');
+            const resultsDiv = document.getElementById('statisticalResults');
+            
+            const variable = variableSelect.value;
+            const distribution = distributionSelect.value;
+            
+            if (!variable) {
+                alert('⚠️ Veuillez sélectionner une variable quantitative');
+                return;
+            }
+            
+            analyzeButton.disabled = true;
+            analyzeButton.textContent = '⏳ Analyse en cours...';
+            resultsDiv.innerHTML = '<div style="text-align: center; padding: 40px;"><p>⏳ Calcul de l\'EDF en cours...</p></div>';
+            
+            try {
+                const response = await fetch('/api/statistical/analyze', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        variable_name: variable,
+                        distribution: distribution
+                    })
+                });
+                
+                const data = await response.json();
+                
+                analyzeButton.disabled = false;
+                analyzeButton.textContent = '📊 Analyser la Variable';
+                
+                if (data.success) {
+                    resultsDiv.innerHTML = `
+                        <div class="stats-results-box">
+                            <h3>📊 Résultats de l'Analyse EDF</h3>
+                            
+                            <div class="stats-image-box">
+                                <h4>📈 Visualisation</h4>
+                                <img src="${data.image_url}" alt="Analyse EDF" class="stats-image">
+                            </div>
+                            
+                            <div class="stats-grid">
+                                <div class="stat-card">
+                                    <div class="stat-label">Variable</div>
+                                    <div class="stat-value">${data.variable}</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-label">Observations</div>
+                                    <div class="stat-value">${data.statistics.count.toLocaleString()}</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-label">Moyenne</div>
+                                    <div class="stat-value">${data.statistics.mean.toFixed(2)}</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-label">Écart-type</div>
+                                    <div class="stat-value">${data.statistics.std.toFixed(2)}</div>
+                                </div>
+                            </div>
+                            
+                            <div class="formula-box">
+                                <h4>📐 Formule EDF Appliquée</h4>
+                                <p class="formula-text">
+                                    <strong>F<sub>${data.edf_data.n}</sub>(x) = (1/${data.edf_data.n}) × Σ<sub>i=1</sub><sup>${data.edf_data.n}</sup> 1<sub>{X_i ≤ x}</sub></strong>
+                                </p>
+                                <p class="formula-note">
+                                    Distribution théorique comparée: <strong>${data.distribution === 'norm' ? 'Normale' : 'Exponentielle'}</strong>
+                                </p>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    resultsDiv.innerHTML = `
+                        <div class="error-box">
+                            <h4>❌ Erreur</h4>
+                            <p>${data.error || 'Erreur inconnue'}</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                analyzeButton.disabled = false;
+                analyzeButton.textContent = '📊 Analyser la Variable';
+                resultsDiv.innerHTML = `
+                    <div class="error-box">
+                        <h4>❌ Erreur de Connexion</h4>
+                        <p>Impossible de se connecter au serveur.</p>
+                    </div>
+                `;
+                console.error('Erreur lors de l\'analyse statistique:', error);
+            }
+        }
+        
+        // ============================================================================
+        // FONCTIONS POUR LA GESTION DES EMBEDDINGS
+        // ============================================================================
+        
+        async function clearEmbeddings() {
+            const statusDiv = document.getElementById('embeddingsStatus');
+            const clearBtn = document.getElementById('clearEmbeddingsBtn');
+            
+            if (!confirm('⚠️ Êtes-vous sûr de vouloir supprimer tous les embeddings ?\n\nCette action est irréversible et nécessitera une régénération pour utiliser la recherche vectorielle.')) {
+                return;
+            }
+            
+            clearBtn.disabled = true;
+            clearBtn.textContent = '⏳ Suppression en cours...';
+            statusDiv.innerHTML = '<p style="color: #f59e0b;">⏳ Suppression des embeddings...</p>';
+            
+            try {
+                const response = await fetch('/api/embeddings/clear', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'}
+                });
+                
+                const data = await response.json();
+                
+                clearBtn.disabled = false;
+                clearBtn.textContent = '🗑️ Supprimer les Embeddings';
+                
+                if (data.success) {
+                    statusDiv.innerHTML = `
+                        <div class="success-box">
+                            <strong>✅ Succès</strong><br>
+                            ${data.deleted} embeddings supprimés de la base de données.
+                        </div>
+                    `;
+                } else {
+                    statusDiv.innerHTML = `
+                        <div class="error-box">
+                            <strong>❌ Erreur</strong><br>
+                            ${data.error || 'Erreur inconnue'}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                clearBtn.disabled = false;
+                clearBtn.textContent = '🗑️ Supprimer les Embeddings';
+                statusDiv.innerHTML = `
+                    <div class="error-box">
+                        <strong>❌ Erreur de Connexion</strong><br>
+                        Impossible de se connecter au serveur.
+                    </div>
+                `;
+                console.error('Erreur lors de la suppression des embeddings:', error);
+            }
+        }
+        
+        async function regenerateEmbeddings() {
+            const statusDiv = document.getElementById('embeddingsStatus');
+            const regenerateBtn = document.getElementById('regenerateEmbeddingsBtn');
+            
+            if (!confirm('🔄 Voulez-vous supprimer et régénérer tous les embeddings ?\n\nCette opération peut prendre plusieurs minutes selon le nombre d\'étudiants.')) {
+                return;
+            }
+            
+            const limitInput = prompt('Nombre maximum d\'étudiants à traiter (laissez vide pour tous):', '2000');
+            const limit = limitInput && limitInput.trim() ? parseInt(limitInput) : null;
+            
+            if (limitInput && isNaN(limit)) {
+                alert('⚠️ Nombre invalide. Utilisation de tous les étudiants.');
+            }
+            
+            regenerateBtn.disabled = true;
+            regenerateBtn.textContent = '⏳ Régénération en cours...';
+            statusDiv.innerHTML = `
+                <div class="warning-box">
+                    <strong>⏳ Régénération en cours...</strong><br>
+                    Cette opération peut prendre plusieurs minutes. Veuillez patienter...
+                </div>
+            `;
+            
+            try {
+                const response = await fetch('/api/embeddings/regenerate', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({limit: limit})
+                });
+                
+                const data = await response.json();
+                
+                regenerateBtn.disabled = false;
+                regenerateBtn.textContent = '🔄 Régénérer les Embeddings';
+                
+                if (data.success) {
+                    statusDiv.innerHTML = `
+                        <div class="success-box">
+                            <strong>✅ Succès</strong><br>
+                            ${data.regenerated} embeddings régénérés (dimension: ${data.dimension})<br>
+                            ${data.deleted} anciens embeddings supprimés
+                        </div>
+                    `;
+                } else {
+                    statusDiv.innerHTML = `
+                        <div class="error-box">
+                            <strong>❌ Erreur</strong><br>
+                            ${data.error || 'Erreur inconnue'}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                regenerateBtn.disabled = false;
+                regenerateBtn.textContent = '🔄 Régénérer les Embeddings';
+                statusDiv.innerHTML = `
+                    <div class="error-box">
+                        <strong>❌ Erreur de Connexion</strong><br>
+                        Impossible de se connecter au serveur.
+                    </div>
+                `;
+                console.error('Erreur lors de la régénération des embeddings:', error);
+            }
+        }
+        
+        // ============================================================================
+        // FONCTION POUR LA SIDEBAR
+        // ============================================================================
+        
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const mainWrapper = document.querySelector('.main-wrapper');
+            
+            if (sidebar && mainWrapper) {
+                sidebar.classList.toggle('closed');
+                mainWrapper.classList.toggle('sidebar-closed');
+                
+                // Sauvegarder l'état dans localStorage
+                const isClosed = sidebar.classList.contains('closed');
+                localStorage.setItem('sidebarClosed', isClosed);
+            }
+        }
+        
+        // Restaurer l'état de la sidebar au chargement
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebar = document.getElementById('sidebar');
+            const mainWrapper = document.querySelector('.main-wrapper');
+            const sidebarClosed = localStorage.getItem('sidebarClosed') === 'true';
+            
+            if (sidebar && mainWrapper && sidebarClosed) {
+                sidebar.classList.add('closed');
+                mainWrapper.classList.add('sidebar-closed');
+            }
+        });
+        
+        // Fermer la sidebar quand on clique en dehors (mobile)
+        document.addEventListener('click', function(event) {
+            const sidebar = document.getElementById('sidebar');
+            const openBtn = document.querySelector('.sidebar-open-btn');
+            const closeBtn = document.querySelector('.sidebar-close-btn');
+            
+            if (window.innerWidth <= 768 && sidebar && !sidebar.classList.contains('closed')) {
+                if (!sidebar.contains(event.target) && 
+                    !openBtn.contains(event.target) && 
+                    !closeBtn.contains(event.target)) {
+                    toggleSidebar();
+                }
+            }
+        });
+    </script>
+</body>
+</html>

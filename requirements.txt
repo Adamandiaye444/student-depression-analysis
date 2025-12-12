@@ -1,0 +1,20 @@
+# Fichier des dépendances Python pour l'application Flask
+# ========================================================
+# Ce fichier liste tous les packages Python nécessaires au projet.
+# Pour installer toutes les dépendances, exécutez :
+# pip install -r requirements.txt
+
+# Framework web Flask
+# Flask permet de créer des applications web en Python
+Flask==3.0.0
+
+# Driver MongoDB pour Python
+# pymongo permet de se connecter et interagir avec MongoDB
+pymongo==4.6.0
+
+# Pandas - Pour la manipulation de DataFrames (utilisé dans la recherche vectorielle ML)
+pandas>=2.1.0
+
+# Optionnel : Pour gérer les variables d'environnement de manière sécurisée
+# python-dotenv==1.0.0
+

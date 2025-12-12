@@ -1,0 +1,76 @@
+
+# Dépendances pour la Recherche Vectorielle Avancée avec Machine Learning
+# ===========================================================================
+# Ce fichier liste les packages Python nécessaires pour la recherche vectorielle
+# et les algorithmes de classification/clustering.
+
+# Dépendances de base (déjà installées)
+Flask==3.0.0
+pymongo==4.6.0
+
+# ============================================================================
+# GÉNÉRATION DES EMBEDDINGS
+# ============================================================================
+
+# Sentence Transformers - Pour générer des embeddings de haute qualité
+# Permet de transformer du texte en vecteurs numériques
+sentence-transformers>=2.2.0
+
+# PyTorch - Framework de deep learning (requis par sentence-transformers)
+torch>=2.6.0
+
+# Transformers - Bibliothèque de Hugging Face pour les modèles NLP
+transformers>=4.35.0
+
+# ============================================================================
+# MODÈLES DE MACHINE LEARNING
+# ============================================================================
+
+# Scikit-learn - Pour Random Forest, Logistic Regression, K-Means
+# Inclut aussi les outils de visualisation et métriques
+scikit-learn>=1.3.0
+
+# XGBoost - Pour le modèle XGBoost (classification/régression avancée)
+xgboost>=2.0.0
+
+# ============================================================================
+# VISUALISATION
+# ============================================================================
+
+# Matplotlib - Pour créer des graphiques
+matplotlib>=3.8.0
+
+# Seaborn - Pour des visualisations statistiques élégantes
+seaborn>=0.13.0
+
+# Plotly - Pour des graphiques interactifs (optionnel)
+plotly>=5.18.0
+
+# ============================================================================
+# TRAITEMENT DE DONNÉES
+# ============================================================================
+
+# NumPy - Calculs numériques et manipulation de vecteurs
+numpy>=1.26.0
+
+# Pandas - Manipulation et analyse de données
+pandas>=2.1.0
+
+# ============================================================================
+# UTILITAIRES
+# ============================================================================
+
+# Tqdm - Barres de progression pour les traitements longs
+tqdm>=4.66.0
+
+# joblib - Pour sauvegarder/charger les modèles ML
+joblib>=1.3.0
+
+# ============================================================================
+# ANALYSE STATISTIQUE
+# ============================================================================
+
+# SciPy - Pour les distributions statistiques et tests
+scipy>=1.11.0
+
+
