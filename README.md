@@ -27,7 +27,7 @@ Cette application combine plusieurs technologies pour offrir une plateforme comp
 - Autocomplétion en temps réel
 - Affichage des 10 premiers résultats si recherche vide
 
-#### 2. Recherche Vectorielle ML (NOUVEAU)
+#### 2. Recherche Vectorielle ML 
 - Recherche sémantique basée sur le sens
 - Utilise SentenceTransformers (modèle all-MiniLM-L6-v2)
 - Exemples de requêtes naturelles :
@@ -35,7 +35,7 @@ Cette application combine plusieurs technologies pour offrir une plateforme comp
   - "personnes dépressives dormant peu"
   - "jeunes avec pression académique élevée"
 
-#### 3. Analyse Statistique (EDF) (NOUVEAU)
+#### 3. Analyse Statistique (EDF) 
 - Fonction de Distribution Empirique (EDF)
 - Tests de normalité (Kolmogorov-Smirnov)
 - Comparaison avec distributions théoriques :
@@ -108,7 +108,7 @@ source venv/bin/activate
 # Dépendances principales
 pip install -r requirements.txt
 
-# Dépendances ML (optionnelles mais recommandées)
+# Dépendances ML (optionnelles)
 pip install -r requirements_ml.txt
 ```
 
