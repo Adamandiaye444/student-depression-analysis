@@ -62,15 +62,7 @@ app.config['DEBUG'] = True
 # ============================================================================
 # CONFIGURATION DE LA CONNEXION MONGODB
 # ============================================================================
-# Chaîne de connexion MongoDB Atlas
-
-MONGODB_URI = "mongodb+srv://adamandiaye1_db_user:tCLjHu1rz8xtwtds@cluster0.ugjeorv.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
-
-# Nom de la base de données
-DATABASE_NAME = "student_depression_db"
-
-# 
-COLLECTION_NAME = "students"  
+from config import MONGODB_URI, DATABASE_NAME, COLLECTION_NAME
 
 # Variable globale pour stocker la connexion MongoDB
 db = None

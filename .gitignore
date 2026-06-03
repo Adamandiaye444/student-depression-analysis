@@ -15,8 +15,10 @@ output.log
 
 # Fichiers système
 .DS_Store
+._*
 .vscode/
 .cursor/
+.idea/
 
 # Variables sensibles
 .env

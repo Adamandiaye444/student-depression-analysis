@@ -10,7 +10,10 @@ print("\n[1/3] Test MongoDB...")
 start = time.time()
 try:
     from pymongo import MongoClient
-    client = MongoClient("mongodb+srv://adamandiaye1_db_user:tCLjHu1rz8xtwtds@cluster0.ugjeorv.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0", serverSelectionTimeoutMS=5000)
+    from config import MONGODB_URI
+    if not MONGODB_URI:
+        raise RuntimeError("MONGODB_URI manquant. Copiez .env.example vers .env")
+    client = MongoClient(MONGODB_URI, serverSelectionTimeoutMS=5000)
     client.admin.command('ping')
     print(f"    ✓ MongoDB OK ({time.time()-start:.2f}s)")
     client.close()

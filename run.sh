@@ -60,7 +60,7 @@ open_browser() {
 }
 
 # Lancer Flask en arrière-plan
-$PYTHON_CMD app.py > /tmp/flask_app_$$.log 2>&1 &
+venv/bin/python3 app.py > /tmp/flask_app_$$.log 2>&1 &
 FLASK_PID=$!
 
 # Attendre que le serveur démarre (vérifier que le port est actif)
